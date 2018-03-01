@@ -34,7 +34,7 @@ void ofApp::setup(){
 	farThreshold = 213;
 	bThreshWithOpenCV = true;
 	
-	ofSetFrameRate(60);
+	ofSetFrameRate(30);
 	
 	// zero the tilt on startup
 	angle = 0;
@@ -98,8 +98,8 @@ void ofApp::initBoxesPosition(){
 //--------------------------------------------------------------
 void ofApp::setupGui(){
 	parameters.setName("parameters");
-	parameters.add(radius.set("radius",50,1,100));
-	parameters.add(color.set("color",100,ofColor(0,0),255));
+	parameters.add(bodyLineSmooth.set("body line smooth",1,1,20));
+	//	parameters.add(color.set("color",100,ofColor(0,0),255));
 	gui.setup(parameters);
 	ofSetBackgroundColor(0);
 }
@@ -120,7 +120,6 @@ void ofApp::exit(){
 
 void ofApp::update(){
 	ofBackground(100, 100, 100);
-	
 	
 	kinect.update();
 	
@@ -164,40 +163,37 @@ void ofApp::update(){
 								   //								   true
 								   false
 								   );
-		//		for(int i = 0; i < contourFinder.blobs.at(0).nPts; i++) {
-		
-		//		cout << contourFinder.blobs.at(0).pts.at(0)[0] << endl;
-		//		cout << contourFinder.blobs.at(0).pts.at(0)[1] << endl;
-		
-		//		markerPosX = contourFinder.blobs.at(0).pts.at(0)[0];
-		//		markerPosY = contourFinder.blobs.at(0).pts.at(1)[0];
 		
 		
-		//		}
+		//	get points of contour .............................
 		
-	}
-	
-	//	get points of contour .............................
-	
-	if(contourFinder.blobs.size() > 0){
-		
-		bodyLine.clear();
-		//		cout << contourFinder.blobs.at(0).nPts << endl;
-		int nPts = contourFinder.blobs.at(0).nPts;
-		for (int i = 0; i<nPts; i++) {
-			int x = contourFinder.blobs.at(0).pts.at(i)[0];
-			int y = contourFinder.blobs.at(0).pts.at(i)[1];
+		if(contourFinder.blobs.size() > 0){
 			
-			bodyLine.addVertex(x,y);
+			bodyLine.clear();
+			//		cout << contourFinder.blobs.at(0).nPts << endl;
+			int nPts = contourFinder.blobs.at(0).nPts;
+			for (int i = 0; i<nPts; i++) {
+				
+				if(i * bodyLineSmooth < nPts){
+					int x = contourFinder.blobs.at(0).pts.at(i * bodyLineSmooth)[0];
+					int y = contourFinder.blobs.at(0).pts.at(i * bodyLineSmooth)[1];
+					bodyLine.addVertex(x,y);
+				}
+			}
 			
+			bodyGround.clear();
+			bodyGround.addVertexes(bodyLine);
+			bodyGround.create(box2d.getWorld());
 		}
+		//	...................................................
 		
-		bodyGround.clear();
-		bodyGround.addVertexes(bodyLine);
-		bodyGround.create(box2d.getWorld());
+		
+		
+		//		update when kinect updated , let box2d waiting kinect
+		box2d.update();
+		
 	}
-	//	...................................................
-	box2d.update();
+	
 	
 	
 	

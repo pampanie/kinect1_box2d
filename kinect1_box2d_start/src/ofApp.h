@@ -41,6 +41,11 @@ public:
 	
 	ofxBox2d box2d;   // the box2d world
 	ofPolyline bodyLine;
+	
+	// number of drop point when combine bodyLine for bodyGround , biger ,smoohter
+	ofParameter<int> bodyLineSmooth;
+//	int bodyLineSmooth;
+	
 	ofxBox2dEdge bodyGround;
 	
 	ofxBox2dEdge leftBar; // the box2d edge/line shape (min 2 points)
@@ -56,14 +61,15 @@ public:
 	float boxDense = 0.1f;
 	float boxBounce = 0.53;
 	float boxFriction = 0.5;
-	int boxSize = 15;
+	int boxSize = 50;
+	
 	
 	bool initBoxesPositionBool = false;
 	
 	
 	ofParameterGroup   parameters;
-	ofParameter<float> radius;
-	ofParameter<ofColor> color;
+//	ofParameter<float> radius;
+//	ofParameter<ofColor> color;
 	ofxPanel gui;
 	
 	ofxKinect kinect;
