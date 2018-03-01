@@ -46,6 +46,54 @@ void ofApp::setup(){
 	markerPosX = 0;
 	markerPosY = 0;
 	
+	
+	
+	//	init box2d
+	box2d.init();
+	box2d.setGravity(0, 5);
+	box2d.createGround();
+	box2d.setFPS(30.0);
+	box2d.registerGrabbing();
+	
+	leftBar.addVertex(0,mainH * 2);
+	leftBar.addVertex(0,0);
+	leftBar.setPhysics(0.0, 0.5, 0.5);
+	leftBar.create(box2d.getWorld());
+	
+	rightBar.addVertex(mainW,mainH * 2);
+	rightBar.addVertex(mainW,0);
+	rightBar.setPhysics(0.0, 0.5, 0.5);
+	rightBar.create(box2d.getWorld());
+	
+	topBar.addVertex(0,mainH * 2);
+	topBar.addVertex(mainW,mainH * 2);
+	topBar.setPhysics(0.0, 0.5, 0.5);
+	topBar.create(box2d.getWorld());
+	
+	//	init boxes in starting position ................
+	//	for (int i=0; i<boxNum; i++) {
+	//		boxes.push_back(std::make_shared<ofxBox2dRect>());
+	//		boxes.back()->setPhysics(boxDense, boxBounce, boxFriction);
+	//		boxes.back()->setup(box2d.getWorld(),
+	//							ofRandom(0,mainW - boxSize),
+	//							0,
+	//							boxSize,
+	//							boxSize);
+	//
+	//	}
+}
+
+void ofApp::initBoxesPosition(){
+	for (int i=0; i<boxNum; i++) {
+		boxes.push_back(std::make_shared<ofxBox2dRect>());
+		boxes.back()->setPhysics(boxDense, boxBounce, boxFriction);
+		boxes.back()->setup(box2d.getWorld(),
+							ofRandom(0,mainW - boxSize),
+							0,
+							boxSize,
+							boxSize);
+		
+	}
 }
 //--------------------------------------------------------------
 void ofApp::setupGui(){
@@ -72,6 +120,7 @@ void ofApp::exit(){
 
 void ofApp::update(){
 	ofBackground(100, 100, 100);
+	
 	
 	kinect.update();
 	
@@ -120,14 +169,42 @@ void ofApp::update(){
 		//		cout << contourFinder.blobs.at(0).pts.at(0)[0] << endl;
 		//		cout << contourFinder.blobs.at(0).pts.at(0)[1] << endl;
 		
-//		markerPosX = contourFinder.blobs.at(0).pts.at(0)[0];
-//		markerPosY = contourFinder.blobs.at(0).pts.at(1)[0];
+		//		markerPosX = contourFinder.blobs.at(0).pts.at(0)[0];
+		//		markerPosY = contourFinder.blobs.at(0).pts.at(1)[0];
 		
 		
 		//		}
 		
 	}
 	
+	//	get points of contour .............................
+	
+	if(contourFinder.blobs.size() > 0){
+		
+		bodyLine.clear();
+		//		cout << contourFinder.blobs.at(0).nPts << endl;
+		int nPts = contourFinder.blobs.at(0).nPts;
+		for (int i = 0; i<nPts; i++) {
+			int x = contourFinder.blobs.at(0).pts.at(i)[0];
+			int y = contourFinder.blobs.at(0).pts.at(i)[1];
+			
+			bodyLine.addVertex(x,y);
+			
+		}
+		
+		bodyGround.clear();
+		bodyGround.addVertexes(bodyLine);
+		bodyGround.create(box2d.getWorld());
+	}
+	//	...................................................
+	box2d.update();
+	
+	
+	
+	if(initBoxesPositionBool){
+		initBoxesPosition();
+		initBoxesPositionBool = !initBoxesPositionBool;
+	}
 }
 
 //--------------------------------------------------------------
@@ -136,17 +213,28 @@ void ofApp::draw(){
 	
 	
 	// draw from the live kinect
-	kinect.drawDepth(10, 10, 400, 300);
-	kinect.draw(420, 10, 400, 300);
+	//	kinect.drawDepth(10, 10, 400, 300);
+	//	kinect.draw(420, 10, 400, 300);
 	
 	//		grayImage.draw(10, 320, 400, 300);
-	contourFinder.draw(10, 320, 400, 300);
+	//	contourFinder.draw(10, 320, 400, 300);
 	
+	ofSetColor(0, 255, 0);
+	bodyGround.updateShape();
+	bodyGround.draw();
 	
 	
 	
 	// draw instructions
 	ofSetColor(255, 255, 255);
+	
+	//	show boxes by box2d
+	for (int i = 0;i<boxes.size();i++) {
+		boxes[i]->draw();
+		
+	}
+	
+	
 	
 	stringstream reportStream;
 	
@@ -180,18 +268,24 @@ void ofApp::draw(){
 	
 	//	markerPosX = contourFinder.blobs.at(0).pts.at(0)[0];
 	//	cout << contourFinder.blobs.size() << endl;
-	if(contourFinder.blobs.size() > 0){
-		
-		
-		cout << contourFinder.blobs.at(0).nPts << endl;
-		
-		for (int i = 0; i<contourFinder.blobs.at(0).nPts; i++) {
-			//		cout << contourFinder.blobs.at(0).pts.at(0)[1] << endl;
-			
-			ofRect(contourFinder.blobs.at(0).pts.at(i)[0],contourFinder.blobs.at(0).pts.at(i)[1],10,10);
-		}
-		
-	}
+	
+	
+	
+	
+	// draw contour via opencv ............................
+	//	if(contourFinder.blobs.size() > 0){
+	//
+	//
+	//		cout << contourFinder.blobs.at(0).nPts << endl;
+	//
+	//		for (int i = 0; i<contourFinder.blobs.at(0).nPts; i++) {
+	//			//		cout << contourFinder.blobs.at(0).pts.at(0)[1] << endl;
+	//
+	//			ofRect(contourFinder.blobs.at(0).pts.at(i)[0],contourFinder.blobs.at(0).pts.at(i)[1],10,10);
+	//		}
+	//
+	//	}
+	//	.................................................
 	
 	
 }
@@ -203,6 +297,9 @@ void ofApp::keyPressed(int key){
 			bThreshWithOpenCV = !bThreshWithOpenCV;
 			break;
 			
+		case 's':
+			initBoxesPositionBool = true;
+			break;
 		case'p':
 			bDrawPointCloud = !bDrawPointCloud;
 			break;

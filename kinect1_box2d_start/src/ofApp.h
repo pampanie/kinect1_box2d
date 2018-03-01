@@ -5,6 +5,7 @@
 #include "ofxOpenCv.h"
 #include "ofxKinect.h"
 #include "ofxCv.h"
+#include "ofxBox2d.h"
 
 using namespace cv;
 using namespace ofxCv;
@@ -31,14 +32,36 @@ public:
 	void gotMessage(ofMessage msg);
 	
 	
-	int mainW = 800;
-	int mainH = 600;
-	int guiW = 300;
-	int guiH = 300;
+	void initBoxesPosition();
+	
+	int mainW  = 800;
+	int mainH  = 600;
+	int guiW   = 300;
+	int guiH   = 300;
+	
+	ofxBox2d box2d;   // the box2d world
+	ofPolyline bodyLine;
+	ofxBox2dEdge bodyGround;
+	
+	ofxBox2dEdge leftBar; // the box2d edge/line shape (min 2 points)
+	ofxBox2dEdge rightBar; // the box2d edge/line shape (min 2 points)
+	ofxBox2dEdge topBar; // the box2d edge/line shape (min 2 points)
+
+	
+//	vector <shared_ptr<ofxBox2dCircle>>	circles; //	default box2d circles
+//	int circlesNum = 100;
+
+	std::vector<std::shared_ptr<ofxBox2dRect>> boxes;
+	int boxNum = 20;
+	float boxDense = 0.1f;
+	float boxBounce = 0.53;
+	float boxFriction = 0.5;
+	int boxSize = 15;
+	
+	bool initBoxesPositionBool = false;
 	
 	
-	
-	ofParameterGroup parameters;
+	ofParameterGroup   parameters;
 	ofParameter<float> radius;
 	ofParameter<ofColor> color;
 	ofxPanel gui;
