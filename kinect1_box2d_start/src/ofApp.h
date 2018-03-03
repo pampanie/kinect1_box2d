@@ -41,7 +41,9 @@ public:
 	
 	ofxBox2d box2d;   // the box2d world
 	ofPolyline bodyLine;
-	
+//	ofPath bodyPath;
+
+
 	// number of drop point when combine bodyLine for bodyGround , biger ,smoohter
 	ofParameter<int> bodyLineSmooth;
 //	int bodyLineSmooth;

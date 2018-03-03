@@ -178,9 +178,15 @@ void ofApp::update(){
 					int x = contourFinder.blobs.at(0).pts.at(i * bodyLineSmooth)[0];
 					int y = contourFinder.blobs.at(0).pts.at(i * bodyLineSmooth)[1];
 					bodyLine.addVertex(x,y);
+					
+				
 				}
 			}
+
 			
+			bodyLine.close();
+			bodyLine.simplify();
+
 			bodyGround.clear();
 			bodyGround.addVertexes(bodyLine);
 			bodyGround.create(box2d.getWorld());
@@ -206,7 +212,6 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 	ofSetColor(255, 255, 255);
-	
 	
 	// draw from the live kinect
 	//	kinect.drawDepth(10, 10, 400, 300);

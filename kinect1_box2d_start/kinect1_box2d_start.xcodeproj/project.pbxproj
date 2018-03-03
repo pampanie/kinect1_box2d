@@ -7516,6 +7516,7 @@
 					<key>HEADER_SEARCH_PATHS</key>
 					<array>
 						<string>$(OF_CORE_HEADERS)</string>
+						<string>src</string>
 						<string>../../../../../../../Applications/of_v0.9.8_osx_release/addons/ofxBox2d-stable/libs</string>
 						<string>../../../../../../../Applications/of_v0.9.8_osx_release/addons/ofxBox2d-stable/libs/Box2D</string>
 						<string>../../../../../../../Applications/of_v0.9.8_osx_release/addons/ofxBox2d-stable/libs/Box2D/Collision</string>
@@ -7638,6 +7639,7 @@
 					<key>HEADER_SEARCH_PATHS</key>
 					<array>
 						<string>$(OF_CORE_HEADERS)</string>
+						<string>src</string>
 						<string>../../../../../../../Applications/of_v0.9.8_osx_release/addons/ofxBox2d-stable/libs</string>
 						<string>../../../../../../../Applications/of_v0.9.8_osx_release/addons/ofxBox2d-stable/libs/Box2D</string>
 						<string>../../../../../../../Applications/of_v0.9.8_osx_release/addons/ofxBox2d-stable/libs/Box2D/Collision</string>
@@ -7936,6 +7938,7 @@
 					<key>HEADER_SEARCH_PATHS</key>
 					<array>
 						<string>$(OF_CORE_HEADERS)</string>
+						<string>src</string>
 						<string>../../../../../../../Applications/of_v0.9.8_osx_release/addons/ofxBox2d-stable/libs</string>
 						<string>../../../../../../../Applications/of_v0.9.8_osx_release/addons/ofxBox2d-stable/libs/Box2D</string>
 						<string>../../../../../../../Applications/of_v0.9.8_osx_release/addons/ofxBox2d-stable/libs/Box2D/Collision</string>
@@ -8048,6 +8051,7 @@
 					<key>HEADER_SEARCH_PATHS</key>
 					<array>
 						<string>$(OF_CORE_HEADERS)</string>
+						<string>src</string>
 						<string>../../../../../../../Applications/of_v0.9.8_osx_release/addons/ofxBox2d-stable/libs</string>
 						<string>../../../../../../../Applications/of_v0.9.8_osx_release/addons/ofxBox2d-stable/libs/Box2D</string>
 						<string>../../../../../../../Applications/of_v0.9.8_osx_release/addons/ofxBox2d-stable/libs/Box2D/Collision</string>
