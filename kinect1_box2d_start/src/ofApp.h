@@ -41,14 +41,20 @@ public:
 	
 	ofxBox2d box2d;   // the box2d world
 	ofPolyline bodyLine;
-//	ofPath bodyPath;
+	ofPath bodyPath;
+	ofMesh bodyMesh;
 
 
 	// number of drop point when combine bodyLine for bodyGround , biger ,smoohter
 	ofParameter<int> bodyLineSmooth;
 //	int bodyLineSmooth;
 	
-	ofxBox2dEdge bodyGround;
+//	set body outline as one ground
+//	ofxBox2dEdge bodyGround;
+//	combine a body by triangles
+	vector <ofxBox2dPolygon> bodyTriangles;
+	
+	
 	
 	ofxBox2dEdge leftBar; // the box2d edge/line shape (min 2 points)
 	ofxBox2dEdge rightBar; // the box2d edge/line shape (min 2 points)

@@ -70,17 +70,8 @@ void ofApp::setup(){
 	topBar.setPhysics(0.0, 0.5, 0.5);
 	topBar.create(box2d.getWorld());
 	
-	//	init boxes in starting position ................
-	//	for (int i=0; i<boxNum; i++) {
-	//		boxes.push_back(std::make_shared<ofxBox2dRect>());
-	//		boxes.back()->setPhysics(boxDense, boxBounce, boxFriction);
-	//		boxes.back()->setup(box2d.getWorld(),
-	//							ofRandom(0,mainW - boxSize),
-	//							0,
-	//							boxSize,
-	//							boxSize);
-	//
-	//	}
+	bodyMesh.setMode(OF_PRIMITIVE_TRIANGLE_STRIP);
+	
 }
 
 void ofApp::initBoxesPosition(){
@@ -169,27 +160,57 @@ void ofApp::update(){
 		
 		if(contourFinder.blobs.size() > 0){
 			
-			bodyLine.clear();
+			//clear all
+//			bodyLine.clear();
+			bodyPath.clear();
+			bodyMesh.clear();
+			
+			
 			//		cout << contourFinder.blobs.at(0).nPts << endl;
 			int nPts = contourFinder.blobs.at(0).nPts;
 			for (int i = 0; i<nPts; i++) {
 				
+//				if(i * bodyLineSmooth < nPts){
+//					int x = contourFinder.blobs.at(0).pts.at(i * bodyLineSmooth)[0];
+//					int y = contourFinder.blobs.at(0).pts.at(i * bodyLineSmooth)[1];
+//					bodyLine.addVertex(x,y);
+//
+//
+//				}
+
 				if(i * bodyLineSmooth < nPts){
 					int x = contourFinder.blobs.at(0).pts.at(i * bodyLineSmooth)[0];
 					int y = contourFinder.blobs.at(0).pts.at(i * bodyLineSmooth)[1];
-					bodyLine.addVertex(x,y);
-					
+
+					if(i == 0){
+						bodyPath.moveTo(x,y);
+					}else{
+						bodyPath.lineTo(x,y);
+					}
 				
 				}
+				
+				
 			}
-
 			
-			bodyLine.close();
-			bodyLine.simplify();
-
-			bodyGround.clear();
-			bodyGround.addVertexes(bodyLine);
-			bodyGround.create(box2d.getWorld());
+			bodyPath.close();
+			bodyPath.simplify();
+			bodyMesh = bodyPath.getTessellation();
+			
+			
+			vector<ofPoint> tempPointVector;
+			for (int i = 0; i < bodyMesh.getNumIndices(); i++) {
+//				cout << bodyMesh.getVertex(bodyMesh.getIndex(i)) << endl;
+				ofPoint p = bodyMesh.getVertex(bodyMesh.getIndex(i));
+				tempPointVector.push_back(p);
+				
+			}
+//			bodyLine.close();
+//			bodyLine.simplify();
+			
+//			bodyGround.clear();
+//			bodyGround.addVertexes(bodyLine);
+//			bodyGround.create(box2d.getWorld());
 		}
 		//	...................................................
 		
@@ -221,8 +242,8 @@ void ofApp::draw(){
 	//	contourFinder.draw(10, 320, 400, 300);
 	
 	ofSetColor(0, 255, 0);
-	bodyGround.updateShape();
-	bodyGround.draw();
+//	bodyGround.updateShape();
+//	bodyGround.draw();
 	
 	
 	
